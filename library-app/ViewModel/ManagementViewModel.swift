@@ -52,22 +52,27 @@ class ManagementViewModel: BaseViewModel {
 
            isLoading = false
        }
+    // Overloading #1 (dipanggil dari View)
+    func markAsReturned(peminjaman: Peminjaman) async {
+        await markAsReturned(id: peminjaman.id)
+    }
 
-       func markAsReturned(peminjaman: Peminjaman) async {
-           do {
-               try await supabase
-                   .from("peminjaman")
-                   .update([
-                       "tanggal_dikembalikan": dateFormatter.string(from: Date())
-                   ])
-                   .eq("id_peminjaman", value: peminjaman.id.uuidString)
-                   .execute()
+    // Overloading #2 (logic inti)
+    func markAsReturned(id: UUID) async {
+        do {
+            try await supabase
+                .from("peminjaman")
+                .update([
+                    "tanggal_dikembalikan": dateFormatter.string(from: Date())
+                ])
+                .eq("id_peminjaman", value: id.uuidString)
+                .execute()
 
-               await fetchPeminjaman()
+            await fetchPeminjaman()
 
-           } catch {
-               errorMessage = error.localizedDescription
-           }
-       }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
 }
 

@@ -74,12 +74,12 @@ struct ManagementView: View {
                                                 .font(.caption)
                                                 .foregroundColor(.orange)
 
-                                            Button("Tandai Dikembalikan") {
+                                            Button {
                                                 Task {
-                                                    await viewModel.markAsReturned(
-                                                        peminjaman: peminjaman
-                                                    )
+                                                    await viewModel.markAsReturned(peminjaman: peminjaman)
                                                 }
+                                            } label: {
+                                                Label("Tandai Dikembalikan", systemImage: "checkmark.circle.fill")
                                             }
                                             .buttonStyle(.borderedProminent)
                                             .padding(.top, 4)
