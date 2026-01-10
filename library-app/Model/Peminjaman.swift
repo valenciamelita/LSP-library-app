@@ -13,6 +13,7 @@ struct Peminjaman: Identifiable, Codable {
     let tanggalKembali: Date
     let tanggalDikembalikan: Date?
     let namaPeminjam: String?
+    let createdAt: Date
     let buku: BukuInfo?
 
     enum CodingKeys: String, CodingKey {
@@ -21,8 +22,7 @@ struct Peminjaman: Identifiable, Codable {
         case tanggalKembali = "tanggal_kembali"
         case tanggalDikembalikan = "tanggal_dikembalikan"
         case namaPeminjam = "nama_peminjam"
+        case createdAt = "created_at"
         case buku
     }
 }
-
-

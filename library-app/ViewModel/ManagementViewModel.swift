@@ -32,13 +32,16 @@ class ManagementViewModel: BaseViewModel {
                        tanggal_pinjam,
                        tanggal_kembali,
                        tanggal_dikembalikan,
+                       created_at, 
                        buku (
                            judul_buku,
                            cover_url
                        )
                    """)
-                   .order("tanggal_pinjam", ascending: false)
+                   .order("created_at", ascending: false)
                    .execute()
+               
+               print(String(data: response.data, encoding: .utf8)!)
                
                let decoder = makeJSONDecoder()
                peminjamanList = try decoder.decode(
