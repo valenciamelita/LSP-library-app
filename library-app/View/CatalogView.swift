@@ -37,9 +37,17 @@ struct CatalogView: View {
                         }
                     }
                     else {
-                        List(viewModel.bukuList) { buku in
-                            VStack(alignment: .leading) {
-                                AsyncImage(url: URL(string: buku.coverUrl ?? "")) { image in
+                        ScrollView {
+                            let columns = [
+                                GridItem(.flexible(), spacing: 16),
+                                GridItem(.flexible(), spacing: 16)
+                            ]
+
+                            LazyVGrid(columns: columns, spacing: 16) {
+                                ForEach(viewModel.bukuList) { buku in
+                                    VStack(alignment: .leading, spacing: 8) {
+
+                                        AsyncImage(url: URL(string: buku.coverUrl ?? "")) { image in
                                             image
                                                 .resizable()
                                                 .scaledToFill()
@@ -49,24 +57,46 @@ struct CatalogView: View {
                                                 .scaledToFit()
                                                 .foregroundColor(.secondary)
                                         }
-                                        .frame(width: 100, height: 150)   // ⬅️ KECIL & PROPORSIONAL
+                                        .frame(height: 160)
+                                        .frame(maxWidth: .infinity)
                                         .clipped()
-                                        .cornerRadius(6)
-                                Text(buku.judulBuku)
-                                    .font(.headline)
+                                        .cornerRadius(10)
 
-                                Text(buku.namaPenulis)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                        Text(buku.judulBuku)
+                                            .font(.headline)
+                                            .lineLimit(2)
 
-                                Text(String( buku.tahunTerbit))
-                                    .font(.caption)
+                                        Text(buku.namaPenulis)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                            .lineLimit(1)
+
+                                        Text(String(buku.tahunTerbit))
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .padding(10)
+                                    .background(Color(.systemBackground))
+                                    .cornerRadius(12)
+                                    .shadow(radius: 2)
+                                }
                             }
-                            .padding(8)
+                            .padding()
+                        }
+                    }
+
+                }
+                .navigationTitle("Katalog Buku")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink {
+                            LoginView()
+                        } label: {
+                            Text("Login Admin")
+                                .foregroundStyle(Color(.blue))
                         }
                     }
                 }
-                .navigationTitle("Katalog Buku")
             }
             .task {
                 await viewModel.fetchCatalog()
