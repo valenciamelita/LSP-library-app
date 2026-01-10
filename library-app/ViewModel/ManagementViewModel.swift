@@ -1,0 +1,73 @@
+//
+//  ManagementViewModel.swift
+//  library-app
+//
+//  Created by Valencia Melita Christy on 10/01/26.
+//
+
+import Foundation
+import Supabase
+import Combine
+
+@MainActor
+class ManagementViewModel: BaseViewModel {
+
+    @Published var peminjamanList: [Peminjaman] = []
+    
+    // Polymorphism
+    override func load() async {
+          await fetchPeminjaman()
+      }
+    
+    func fetchPeminjaman() async {
+           isLoading = true
+           errorMessage = nil
+
+           do {
+               let response = try await supabase
+                   .from("peminjaman")
+                   .select("""
+                       id_peminjaman,
+                       nama_peminjam,
+                       tanggal_pinjam,
+                       tanggal_kembali,
+                       tanggal_dikembalikan,
+                       buku (
+                           judul_buku,
+                           cover_url
+                       )
+                   """)
+                   .order("tanggal_pinjam", ascending: false)
+                   .execute()
+               
+               let decoder = makeJSONDecoder()
+               peminjamanList = try decoder.decode(
+                   [Peminjaman].self,
+                   from: response.data
+               )
+
+           } catch {
+               errorMessage = error.localizedDescription
+           }
+
+           isLoading = false
+       }
+
+       func markAsReturned(peminjaman: Peminjaman) async {
+           do {
+               try await supabase
+                   .from("peminjaman")
+                   .update([
+                       "tanggal_dikembalikan": dateFormatter.string(from: Date())
+                   ])
+                   .eq("id_peminjaman", value: peminjaman.id.uuidString)
+                   .execute()
+
+               await fetchPeminjaman()
+
+           } catch {
+               errorMessage = error.localizedDescription
+           }
+       }
+}
+

@@ -9,20 +9,20 @@ import Foundation
 
 struct Peminjaman: Identifiable, Codable {
     let id: UUID
-    let idBuku: UUID
     let tanggalPinjam: Date
     let tanggalKembali: Date
     let tanggalDikembalikan: Date?
-    let createdAt: Date
-    let namaPeminjam: String
+    let namaPeminjam: String?
+    let buku: BukuInfo?
 
     enum CodingKeys: String, CodingKey {
         case id = "id_peminjaman"
-        case idBuku = "id_buku"
         case tanggalPinjam = "tanggal_pinjam"
         case tanggalKembali = "tanggal_kembali"
         case tanggalDikembalikan = "tanggal_dikembalikan"
-        case createdAt = "created_at"
         case namaPeminjam = "nama_peminjam"
+        case buku
     }
 }
+
+

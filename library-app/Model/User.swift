@@ -10,11 +10,9 @@ import Foundation
 struct User: Identifiable, Codable {
     let id: UUID
     let username: String
-    let password: String
 
     enum CodingKeys: String, CodingKey {
         case id = "id_user"
         case username
-        case password
     }
 }

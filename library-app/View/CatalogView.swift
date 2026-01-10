@@ -47,20 +47,33 @@ struct CatalogView: View {
                                 ForEach(viewModel.bukuList) { buku in
                                     VStack(alignment: .leading, spacing: 8) {
 
-                                        AsyncImage(url: URL(string: buku.coverUrl ?? "")) { image in
-                                            image
-                                                .resizable()
-                                                .scaledToFill()
-                                        } placeholder: {
-                                            Image(systemName: "book.closed")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .foregroundColor(.secondary)
+                                        ZStack(alignment: .topTrailing) {
+
+                                            AsyncImage(url: URL(string: buku.coverUrl ?? "")) { image in
+                                                image
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            } placeholder: {
+                                                Image(systemName: "book.closed")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .frame(maxHeight: 250)
+                                            .frame(maxWidth: 160)
+                                            .clipped()
+                                            .cornerRadius(10)
+
+                                            Text(buku.status.capitalized)
+                                                .font(.caption2)
+                                                .fontWeight(.semibold)
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 4)
+                                                .background(statusColor(buku.status))
+                                                .foregroundColor(.white)
+                                                .clipShape(Capsule())
+                                                .padding(8)
                                         }
-                                        .frame(height: 160)
-                                        .frame(maxWidth: .infinity)
-                                        .clipped()
-                                        .cornerRadius(10)
 
                                         Text(buku.judulBuku)
                                             .font(.headline)
@@ -83,6 +96,9 @@ struct CatalogView: View {
                             }
                             .padding()
                         }
+                        .refreshable {
+                            await viewModel.fetchCatalog()
+                        }
                     }
 
                 }
@@ -99,7 +115,7 @@ struct CatalogView: View {
                 }
             }
             .task {
-                await viewModel.fetchCatalog()
+                await viewModel.load()
             }
         }
 }

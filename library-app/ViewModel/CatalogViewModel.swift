@@ -10,14 +10,15 @@ import Supabase
 import Combine
 
 @MainActor
-class CatalogViewModel: ObservableObject {
+class CatalogViewModel: BaseViewModel {
 
-    // MARK: - State
     @Published var bukuList: [Buku] = []
-    @Published var isLoading: Bool = false
-    @Published var errorMessage: String?
-
-    // MARK: - Fetch Catalog
+    
+    // Polymorphism
+    override func load() async {
+          await fetchCatalog()
+      }
+    
     func fetchCatalog() async {
         isLoading = true
         errorMessage = nil
