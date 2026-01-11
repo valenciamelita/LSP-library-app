@@ -35,6 +35,7 @@ struct LoginView: View {
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
 
+                        //Password
                         HStack {
                             Image(systemName: "lock")
                                 .foregroundColor(.gray)

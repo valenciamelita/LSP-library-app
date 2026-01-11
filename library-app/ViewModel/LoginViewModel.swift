@@ -22,6 +22,8 @@ class LoginViewModel: BaseViewModel {
         defer { isLoading = false }
 
         do {
+            // Melakukan proses login menggunakan RPC (Remote Procedure Call) Supabase
+            // Memanggil PostgreSQL function `login_user`
             let response = try await supabase
                 .rpc("login_user", params: [
                     "p_username": username,
@@ -29,8 +31,10 @@ class LoginViewModel: BaseViewModel {
                 ])
                 .execute()
 
+            //Decode hasil row user
             let users = try JSONDecoder().decode([User].self, from: response.data)
 
+            //Kalau ada yang keluar, authentifikasi berhasil
             if !users.isEmpty {
                 isAuthenticated = true
             } else {

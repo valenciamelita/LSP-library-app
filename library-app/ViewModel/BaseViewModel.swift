@@ -7,13 +7,13 @@
 
 import Combine
 
-
+// Penerapan OOP (Inheritance & Polymorphism)
 class BaseViewModel: ObservableObject {
-    // Inheritance
+    // Inheritance -- menurunkan sifat" ke ViewModel yang memakai BaseViewModel
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    // Polymorphism
+    // Polymorphism -- menyederhanakan fetch di semua viewModel
     func load() async {}
 }
 

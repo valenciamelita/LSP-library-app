@@ -15,6 +15,7 @@ struct CatalogView: View {
     var body: some View {
             NavigationStack {
                 Group {
+                    // ViewModel ambil data
                     if viewModel.isLoading {
                         ProgressView("Loading katalog...")
                     } else if let error = viewModel.errorMessage {
@@ -25,6 +26,7 @@ struct CatalogView: View {
                                 .font(.caption)
                                 .foregroundColor(.red)
                         }
+                    //Kalau belum ada buku
                     }  else if viewModel.bukuList.isEmpty {
                         VStack(spacing: 8) {
                             Image(systemName: "book.closed")
@@ -36,6 +38,7 @@ struct CatalogView: View {
                                 .foregroundColor(.secondary)
                         }
                     }
+                    // Kalau ada buku
                     else {
                         ScrollView {
                             let columns = [
@@ -46,7 +49,7 @@ struct CatalogView: View {
                             LazyVGrid(columns: columns, spacing: 16) {
                                 ForEach(viewModel.bukuList) { buku in
                                     VStack(alignment: .leading, spacing: 8) {
-
+                                        // Card buku
                                         ZStack(alignment: .topTrailing) {
 
                                             AsyncImage(url: URL(string: buku.coverUrl ?? "")) { image in
@@ -96,8 +99,9 @@ struct CatalogView: View {
                             }
                             .padding()
                         }
+                        // Pull to refresh
                         .refreshable {
-                            await viewModel.fetchCatalog()
+                            await viewModel.load()
                         }
                     }
 
@@ -114,6 +118,7 @@ struct CatalogView: View {
                     }
                 }
             }
+            // Load data katalog saat view pertama muncul
             .task {
                 await viewModel.load()
             }

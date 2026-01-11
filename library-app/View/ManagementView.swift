@@ -46,7 +46,7 @@ struct ManagementView: View {
                                     .clipped()
                                     .cornerRadius(6)
 
-                                    // 📄 INFO
+                                    // INFO
                                     VStack(alignment: .leading, spacing: 6) {
 
                                         // Judul buku
@@ -58,13 +58,16 @@ struct ManagementView: View {
                                         Text("Peminjam: \(peminjaman.namaPeminjam ?? "Unknown")")
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
-
+                                        
+                                        // Tanggal pinjam
                                         Text("Pinjam: \(format(peminjaman.tanggalPinjam))")
                                             .font(.caption)
-
+                                        
+                                        // Tanggal harus kembali
                                         Text("Harus kembali: \(format(peminjaman.tanggalKembali))")
                                             .font(.caption)
 
+                                        // Tanggal dikembalikan
                                         if let dikembalikan = peminjaman.tanggalDikembalikan {
                                             Text("Dikembalikan: \(format(dikembalikan))")
                                                 .font(.caption)
@@ -74,6 +77,7 @@ struct ManagementView: View {
                                                 .font(.caption)
                                                 .foregroundColor(.orange)
 
+                                            // Button dikembalikan
                                             Button {
                                                 Task {
                                                     await viewModel.markAsReturned(peminjaman: peminjaman)
@@ -96,7 +100,7 @@ struct ManagementView: View {
                         }
                         .padding()
                     }
-                    .refreshable(action: viewModel.fetchPeminjaman)
+                    .refreshable(action: viewModel.load)
                 }
 
             }

@@ -5,6 +5,7 @@
 //  Created by Valencia Melita Christy on 09/01/26.
 //
 
+// Model data untuk merepresentasikan transaksi peminjaman buku
 import Foundation
 
 struct Peminjaman: Identifiable, Codable {
@@ -16,6 +17,7 @@ struct Peminjaman: Identifiable, Codable {
     let createdAt: Date
     let buku: BukuInfo?
 
+    // Mapping nama properti Swift ke nama kolom database / JSON
     enum CodingKeys: String, CodingKey {
         case id = "id_peminjaman"
         case tanggalPinjam = "tanggal_pinjam"

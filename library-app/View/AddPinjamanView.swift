@@ -10,16 +10,19 @@ import SwiftUI
 struct AddPeminjamanView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = AddPeminjamanViewModel()
+    
+    // Menyimpan ID buku yang dipilih dari Picker
     @State private var selectedBukuID: UUID? = nil
 
     var body: some View {
         NavigationStack {
             Form {
-
+                // Nama Peminjam
                 Section(header: Text("Data Peminjam")) {
                     TextField("Nama Peminjam", text: $viewModel.namaPeminjam)
                 }
-
+                
+                // Pilih Buku
                 Section(header: Text("Buku")) {
                     if viewModel.bukuList.isEmpty {
                         Text("Tidak ada buku tersedia")
@@ -36,7 +39,7 @@ struct AddPeminjamanView: View {
                         }
                     }
                 }
-
+                // Tanggal Pinjam (hari ini)
                 Section(header: Text("Tanggal")) {
                     HStack {
                         Text("Tanggal Pinjam")
@@ -61,13 +64,14 @@ struct AddPeminjamanView: View {
                         .foregroundColor(.secondary)
                     }
                 }
-
+                // Error handling
                 if let error = viewModel.errorMessage {
                     Section {
                         Text(error)
                             .foregroundColor(.red)
                     }
                 }
+                // Button Simpan
                 Section {
                     Button {
                         Task {
@@ -100,10 +104,14 @@ struct AddPeminjamanView: View {
             }
             .navigationTitle("Tambah Peminjaman")
             .navigationBarTitleDisplayMode(.inline)
+            
+            // Load data buku saat view muncul
             .task {
                 await viewModel.load()
                 selectedBukuID = viewModel.selectedBuku?.id
             }
+            
+            // Sinkronisasi pilihan buku dengan ViewModel
             .onChange(of: selectedBukuID) { _, newID in
                 if let id = newID {
                     viewModel.selectedBuku = viewModel.bukuList.first { $0.id == id }
@@ -111,6 +119,8 @@ struct AddPeminjamanView: View {
                     viewModel.selectedBuku = nil
                 }
             }
+            
+            // Tutup view jika penyimpanan berhasil
             .onChange(of: viewModel.isSuccess) { _, success in
                 if success {
                     dismiss()

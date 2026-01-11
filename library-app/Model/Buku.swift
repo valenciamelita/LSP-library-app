@@ -5,6 +5,7 @@
 //  Created by Valencia Melita Christy on 09/01/26.
 //
 
+// Buku.swift: Model data untuk merepresentasikan entitas Buku
 import Foundation
 
 struct Buku: Identifiable, Codable {
@@ -15,6 +16,7 @@ struct Buku: Identifiable, Codable {
     let coverUrl: String?
     let tahunTerbit: Int
 
+    // Mapping nama properti Swift ke nama kolom database / JSON
     enum CodingKeys: String, CodingKey {
         case id = "id_buku"
         case judulBuku = "judul_buku"

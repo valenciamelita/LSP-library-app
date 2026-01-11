@@ -5,6 +5,7 @@
 //  Created by Valencia Melita Christy on 10/01/26.
 //
 
+// Digunakan sebagai reusable ganti warna
 import SwiftUI
 
 func statusColor(_ status: String) -> Color {

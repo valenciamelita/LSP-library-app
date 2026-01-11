@@ -19,11 +19,13 @@ class ManagementViewModel: BaseViewModel {
           await fetchPeminjaman()
       }
     
+    // Mengambil data peminjaman beserta informasi buku
     func fetchPeminjaman() async {
            isLoading = true
            errorMessage = nil
 
            do {
+               // Mengambil data dari peminjaman, ambil kolom-kolom tertentu, sekalian ambil data buku yang berelasi,lalu urutkan dari data paling baru
                let response = try await supabase
                    .from("peminjaman")
                    .select("""
@@ -63,6 +65,7 @@ class ManagementViewModel: BaseViewModel {
     // Overloading #2 (logic inti)
     func markAsReturned(id: UUID) async {
         do {
+            //Mengambil dari data peminjaman, update data tanggal_dikembalikan, where id_peminjaman sesuai yang dipilih
             try await supabase
                 .from("peminjaman")
                 .update([

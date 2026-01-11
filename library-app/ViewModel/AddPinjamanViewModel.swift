@@ -19,12 +19,15 @@ class AddPeminjamanViewModel: BaseViewModel {
     
     @Published var isSuccess = false
     
+    // Polymorphism
     override func load() async {
           await fetchBukuTersedia()
       }
 
+    // Mengambil daftar buku dengan status "tersedia"
     func fetchBukuTersedia() async {
         do {
+            // Ambil tabel buku, select semua yang statusnya tersedia, order by judul_buku asc)
             let response = try await supabase
                 .from("buku")
                 .select()
@@ -32,6 +35,7 @@ class AddPeminjamanViewModel: BaseViewModel {
                 .order("judul_buku", ascending: true)
                 .execute()
 
+            // Decode JSON ke model
             bukuList = try makeJSONDecoder().decode(
                 [Buku].self,
                 from: response.data
@@ -41,22 +45,26 @@ class AddPeminjamanViewModel: BaseViewModel {
         }
     }
 
+    // Menyimpan data peminjaman ke database
     func submit() async {
+        // Kalau tidak ada buku yg dipilih, error message keluar
         guard let buku = selectedBuku else {
             errorMessage = "Buku harus dipilih"
             return
         }
-
+        
         isLoading = true
         errorMessage = nil
 
         do {
+            // Tanggal kembali dari curr date + 7 hr
             let tanggalKembali = Calendar.current.date(
                 byAdding: .day,
                 value: 7,
                 to: tanggalPinjam
             )!
-
+            
+            // Insert ke peminjaman, value sesuai id buku, nama, tanggal pinjam dan kembali
             try await supabase
                 .from("peminjaman")
                 .insert([

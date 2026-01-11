@@ -15,26 +15,30 @@ class CatalogViewModel: BaseViewModel {
     @Published var bukuList: [Buku] = []
     
     // Polymorphism
+    // load semua buku dipanggil di awal
     override func load() async {
           await fetchCatalog()
       }
     
+    // Mengambil semua buku
     func fetchCatalog() async {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
 
         do {
+            // Mengambil semua buku dan order by judul buku asc
             let response = try await supabase
                 .from("buku")
                 .select()
                 .order("judul_buku", ascending: true)
                 .execute()
 
+            // Decode JSON ke model
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-
             bukuList = try decoder.decode([Buku].self, from: response.data)
+            
         } catch {
             errorMessage = error.localizedDescription
         }

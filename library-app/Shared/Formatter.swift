@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Digunakan untuk menampilkan tanggal ke UI, Locale POSIX untuk memastikan parsing konsisten, dan tidak terpengaruh pengaturan perangkat (dateFormatter + format:)
 let dateFormatter: DateFormatter = {
     let f = DateFormatter()
     f.dateFormat = "yyyy-MM-dd"
@@ -14,10 +15,13 @@ let dateFormatter: DateFormatter = {
     return f
 }()
 
+
 func format(_ date: Date) -> String {
     dateFormatter.string(from: date)
 }
 
+// Membuat JSONDecoder dengan strategi decoding tanggal khusus
+// Digunakan untuk menangani berbagai format tanggal dari Supabase
 func makeJSONDecoder() -> JSONDecoder {
     let decoder = JSONDecoder()
 
